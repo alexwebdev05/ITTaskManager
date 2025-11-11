@@ -29,36 +29,80 @@ fn main() {
 
     impl Task {
 
-        pub fn new(title: String, description: String, priority: TaskPriority, status: TaskStatus) {
+        fn new(title: String, description: String, priority: TaskPriority, status: TaskStatus) -> Task {
             Task {
                 id: Uuid::new_v4(),
                 title,
                 description,
                 priority,
                 status
-            };
+            }
         }
 
-        pub fn display(&self) {
+        fn display(&self) {
             println!("ID: {} | {} | {:?}", self.id, self.title, self.priority);
             println!("Status: {:?}", self.status);
             println!("Description: {}\n", self.description);
         }
 
-        pub fn start() {
-
+        fn start(&mut self) {
+            self.status = TaskStatus::InProgress;
         }
 
-        pub fn complete() {
-
+        fn complete(&mut self) {
+            self.status = TaskStatus::Complete;
         }
 
-        pub fn block() {
-
+        fn block(&mut self, reason: String) {
+            self.status = TaskStatus::Blocked { reason: (reason) }
         }
 
-        pub fn is_complete() {
+        fn is_complete(&mut self) {
+            self.status = TaskStatus::Complete;
+        }
 
+    }
+
+    struct TaskManager {
+        tasks: Vec<Task>
+    }
+
+    impl TaskManager {
+
+        fn new() {
+            TaskManager {
+                tasks: Vec::new()
+            };
+        }
+
+        fn add_task(&mut self, title: String, description: String, priority: TaskPriority, status: TaskStatus) {
+            self.tasks.push(Task::new(title, description, priority, status));
+        }
+
+        fn list_tasks(&self) {
+            println!("Tasks: {:?}", self.tasks);
+        }
+
+        fn find_task_mut(&mut self, id: Uuid) -> Option<&mut Task> {
+            self.tasks.iter_mut().find(|task| task.id == id)
+        }
+
+        fn list_by_priority(&self) {
+            let mut critical: Vec<&Task> = Vec::new();
+            let mut high: Vec<&Task> = Vec::new();
+            let mut medium: Vec<&Task> = Vec::new();
+            let mut low: Vec<&Task> = Vec::new();
+
+            for task in self.tasks.iter() {
+                match task.priority {
+                    TaskPriority::Critical => critical.push(task),
+                    TaskPriority::High => high.push(task),
+                    TaskPriority::Medium => medium.push(task),
+                    TaskPriority::Low => low.push(task)
+                }
+            }
+
+            println!("Tasks: {:?} {:?} {:?} {:?}", critical, high, medium, low)
         }
 
     }

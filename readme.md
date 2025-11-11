@@ -11,16 +11,16 @@ Proyecto CLI para practicar conceptos fundamentales de Rust: enums, structs, imp
 ### Fase 2: Métodos de Task
 - [*] Constructor `new()`
 - [*] `display()` para mostrar info
-- [ ] `start()`, `complete()`, `block()` para cambiar estados
-- [ ] `is_completed()` para verificar estado
+- [*] `start()`, `complete()`, `block()` para cambiar estados
+- [*] `is_completed()` para verificar estado
 
 ### Fase 3: TaskManager
-- [ ] Crear la struct `TaskManager`
-- [ ] Constructor `new()`
-- [ ] `add_task()` para crear tareas
-- [ ] `list_tasks()` para mostrar todas
-- [ ] `find_task_mut()` para buscar por ID
-- [ ] `list_by_priority()` para filtrar
+- [*] Crear la struct `TaskManager`
+- [*] Constructor `new()`
+- [*] `add_task()` para crear tareas
+- [*] `list_tasks()` para mostrar todas
+- [*] `find_task_mut()` para buscar por ID
+- [*] `list_by_priority()` para filtrar
 
 ### Fase 4: Interfaz CLI
 - [ ] Crear nueva tarea

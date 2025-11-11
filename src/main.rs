@@ -1,110 +1,58 @@
-use uuid::Uuid;
+mod task_manager;
+
+use std::io;
+
+use task_manager::{TaskManager, TaskPriority, TaskStatus};
 
 fn main() {
-    
-    #[derive(Debug, Clone)]
-    enum TaskPriority {
-        Critical,
-        High,
-        Medium,
-        Low
-    }
+    // Set up task manager
+    let mut manager = TaskManager::new();
 
-    #[derive(Debug, Clone)]
-    enum TaskStatus {
-        Pending,
-        InProgress,
-        Blocked { reason: String },
-        Complete
-    }
+    // Cli
+    println!("##### TaskManager #####\n");
+    println!("Choose one of those options:");
+    println!(" 1: Create a new task");
+    println!(" 2: List tasks");
+    println!(" 3: Change task state");
+    println!(" 4: Filter by priority");
+    println!(" 5: Close");
 
-    #[derive(Debug, Clone)]
-    struct Task {
-        id: Uuid,
-        title: String,
-        description: String,
-        priority: TaskPriority,
-        status: TaskStatus
-    }
+    // Get response
+    let mut input = String::new();
+    io::stdin().read_line(&mut input);
 
-    impl Task {
+    match input.trim() {
+        "1" => {
+            let mut title = String::new();
+            let mut description = String::new();
+            let mut priority: TaskPriority;
+            let status = TaskStatus::Pending;
 
-        fn new(title: String, description: String, priority: TaskPriority, status: TaskStatus) -> Task {
-            Task {
-                id: Uuid::new_v4(),
-                title,
-                description,
-                priority,
-                status
-            }
-        }
+            println!("Enter a title: ");
+            io::stdin().read_line(&mut title);
+            
+            println!("Enter a description: ");
+            io::stdin().read_line(&mut description);
+            
+            let mut priority_option = String::new();
+            println!("Select the priority: ");
+            println!(" 1: Critical");
+            println!(" 2: High");
+            println!(" 3: Medium");
+            println!(" 4: Low");
+            io::stdin().read_line(&mut priority_option);
 
-        fn display(&self) {
-            println!("ID: {} | {} | {:?}", self.id, self.title, self.priority);
-            println!("Status: {:?}", self.status);
-            println!("Description: {}\n", self.description);
-        }
-
-        fn start(&mut self) {
-            self.status = TaskStatus::InProgress;
-        }
-
-        fn complete(&mut self) {
-            self.status = TaskStatus::Complete;
-        }
-
-        fn block(&mut self, reason: String) {
-            self.status = TaskStatus::Blocked { reason: (reason) }
-        }
-
-        fn is_complete(&mut self) {
-            self.status = TaskStatus::Complete;
-        }
-
-    }
-
-    struct TaskManager {
-        tasks: Vec<Task>
-    }
-
-    impl TaskManager {
-
-        fn new() {
-            TaskManager {
-                tasks: Vec::new()
-            };
-        }
-
-        fn add_task(&mut self, title: String, description: String, priority: TaskPriority, status: TaskStatus) {
-            self.tasks.push(Task::new(title, description, priority, status));
-        }
-
-        fn list_tasks(&self) {
-            println!("Tasks: {:?}", self.tasks);
-        }
-
-        fn find_task_mut(&mut self, id: Uuid) -> Option<&mut Task> {
-            self.tasks.iter_mut().find(|task| task.id == id)
-        }
-
-        fn list_by_priority(&self) {
-            let mut critical: Vec<&Task> = Vec::new();
-            let mut high: Vec<&Task> = Vec::new();
-            let mut medium: Vec<&Task> = Vec::new();
-            let mut low: Vec<&Task> = Vec::new();
-
-            for task in self.tasks.iter() {
-                match task.priority {
-                    TaskPriority::Critical => critical.push(task),
-                    TaskPriority::High => high.push(task),
-                    TaskPriority::Medium => medium.push(task),
-                    TaskPriority::Low => low.push(task)
-                }
+            match priority_option.trim() {
+                "1" => priority = TaskPriority::Critical,
+                "2" => priority = TaskPriority::High,
+                "3" => priority = TaskPriority::Medium,
+                "4" => priority = TaskPriority::Low,
+                _ => priority = TaskPriority::Medium,
             }
 
-            println!("Tasks: {:?} {:?} {:?} {:?}", critical, high, medium, low)
-        }
-
+            manager.add_task(title.trim().to_string(), description.trim().to_string(), priority, status);
+            manager.list_tasks();
+        },
+        _ => print!("Select an option")
     }
-
 }

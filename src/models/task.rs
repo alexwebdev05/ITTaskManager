@@ -3,11 +3,11 @@ use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Task {
-    id: Uuid,
-    title: String,
-    description: String,
-    priority: TaskPriority,
-    status: TaskStatus,
+    pub id: Uuid,
+    pub title: String,
+    pub description: String,
+    pub priority: TaskPriority,
+    pub status: TaskStatus,
 }
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize)]
@@ -27,6 +27,7 @@ pub enum TaskStatus {
 }
 
 impl Task {
+    
     pub fn new(title: String, description: String, priority: TaskPriority, status: TaskStatus) -> Task {
         Task {
             id: Uuid::new_v4(),
@@ -37,11 +38,11 @@ impl Task {
         }
     }
 
-    // pub fn display(&self) {
-    //     println!("ID: {} | {} | {:?}", self.id, self.title, self.priority);
-    //     println!("Status: {:?}", self.status);
-    //     println!("Description: {}\n", self.description);
-    // }
+    pub fn display(&self) {
+        println!("ID: {} | {} | {:?}", self.id, self.title, self.priority);
+        println!("Status: {:?}", self.status);
+        println!("Description: {}\n", self.description);
+    }
 
     // pub fn start(&mut self) {
     //     self.status = TaskStatus::InProgress;

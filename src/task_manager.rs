@@ -1,6 +1,13 @@
 use uuid::Uuid;
 
-#[derive(Debug, Clone, Copy)]
+use serde_json;
+use serde::{Serialize, Deserialize};
+use std::fs::File;
+use std::io::Write;
+use std::path::Path;
+use std::fs;
+
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub enum TaskPriority {
     Critical,
     High,
@@ -8,7 +15,7 @@ pub enum TaskPriority {
     Low,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum TaskStatus {
     Pending,
     InProgress,
@@ -16,7 +23,7 @@ pub enum TaskStatus {
     Complete,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 struct Task {
     id: Uuid,
     title: String,
@@ -64,8 +71,11 @@ pub struct TaskManager {
 }
 
 impl TaskManager {
+
     pub fn new() -> TaskManager {
-        TaskManager { tasks: Vec::new() }
+        TaskManager {
+            tasks: Vec::new() 
+        }
     }
 
     pub fn add_task(
@@ -74,34 +84,32 @@ impl TaskManager {
         description: String,
         priority: TaskPriority,
         status: TaskStatus,
-    ) {
-        self.tasks
-            .push(Task::new(title, description, priority, status));
-    }
-
-    pub fn list_tasks(&self) {
-        println!("Tasks: {:?}", self.tasks);
-    }
-
-    pub fn find_task_mut(&mut self, id: Uuid) -> Option<&mut Task> {
-        self.tasks.iter_mut().find(|task| task.id == id)
-    }
-
-    pub fn list_by_priority(&self) {
-        let mut critical: Vec<&Task> = Vec::new();
-        let mut high: Vec<&Task> = Vec::new();
-        let mut medium: Vec<&Task> = Vec::new();
-        let mut low: Vec<&Task> = Vec::new();
-
-        for task in self.tasks.iter() {
-            match task.priority {
-                TaskPriority::Critical => critical.push(task),
-                TaskPriority::High => high.push(task),
-                TaskPriority::Medium => medium.push(task),
-                TaskPriority::Low => low.push(task),
-            }
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        // If file already exists
+        if Path::new("data/tasks.json").exists() {
+            let data = fs::read_to_string("data/tasks.json")?;
+            self.tasks = serde_json::from_str(&data)?;
         }
 
-        println!("Tasks: {:?} {:?} {:?} {:?}", critical, high, medium, low)
+        // Create and add new task
+        let task = Task::new(title, description, priority, status);
+        self.tasks.push(task);
+
+        // Store tasks
+        let json = serde_json::to_string_pretty(&self.tasks)?;
+        
+        let mut file = File::create("data/tasks.json")?;
+        file.write_all(json.as_bytes())?;
+
+        Ok(())
+    }
+
+    pub fn list_tasks(&mut self) -> Result<(), Box<dyn std::error::Error>> {
+        if Path::new("data/tasks.json").exists() {
+            let data = fs::read_to_string("data/tasks.json")?;
+            self.tasks = serde_json::from_str(&data)?;
+        }
+        println!("Tasks: {:?}", self.tasks);
+        Ok(())
     }
 }

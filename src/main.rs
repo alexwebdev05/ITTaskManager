@@ -1,8 +1,9 @@
-mod task_manager;
+mod models;
+mod storage;
 
 use std::io::{self, Write};
 
-use task_manager::{TaskManager, TaskPriority, TaskStatus};
+use models::{TaskManager, TaskPriority, TaskStatus};
 
 fn main() {
     // Set up task manager
@@ -59,11 +60,11 @@ fn main() {
                     description.trim().to_string(),
                     priority,
                     status,
-                );
+                ).unwrap();
                 println!("Task added correctly.")
             }
             "2" => {
-                manager.list_tasks();
+                manager.list_tasks().unwrap();
             }
             _ => print!("Select an option"),
         }

@@ -10,7 +10,7 @@ pub struct Task {
     pub status: TaskStatus,
 }
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq)]
 pub enum TaskPriority {
     Critical,
     High,

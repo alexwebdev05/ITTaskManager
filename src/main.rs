@@ -109,6 +109,30 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     Err(e) => eprintln!("{}", e)
                 }
             }
+            "4" => {
+                let mut priority_option = String::new();
+                let priority: TaskPriority;
+
+                println!("\n\nSelect the priority: ");
+                println!(" 1: Critical");
+                println!(" 2: High");
+                println!(" 3: Medium");
+                println!(" 4: Low\n");
+                io::stdin().read_line(&mut priority_option)?;
+
+                match priority_option.trim() {
+                    "1" => priority = TaskPriority::Critical,
+                    "2" => priority = TaskPriority::High,
+                    "3" => priority = TaskPriority::Medium,
+                    "4" => priority = TaskPriority::Low,
+                    _ => {
+                        println!("You doesn't select an option and it is now Medium priority.");
+                        priority = TaskPriority::Medium
+                    }
+                }
+
+                manager.filter_priority(priority)
+            }
             "5" => break ,
             _ => println!("Select an option!!!"),
         }

@@ -56,4 +56,10 @@ impl TaskManager {
         }
     }
 
+    pub fn filter_priority(&mut self, priority: TaskPriority) {
+        for task in self.tasks.iter() {
+            if task.priority == priority { task.display() }
+        }
+    }
+
 }

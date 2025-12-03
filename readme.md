@@ -1,5 +1,18 @@
-# IT task manager - Learning project
-I made this project to learn some rust functionalityes.
+# IT task manager - Proyecto de aprendizaje
+Este proyecto formó parte de mi aprendizaje de rust. Mi objetivo era aprender las bases del lenguaje.
 
-# Functionality
-This app allow you to make tasks and save it locally
+## Funcionalidades
+Esta aplicación permite crear tareas (tickets) con distintas prioridades y almacenarlas en un archivo estático.
+
+## Instalación
+Ve a [https://github.com/alexwebdev05/ITTaskManager/releases](url) y descarga la última versión
+
+## Uso
+Habrá 5 opciones disponibles:
+1. Create a new task
+2. List tasks
+3. Change task state
+4. Filter by priority
+5. Close
+
+Las opciones se escogerán introduciendo el número de la opción deseada.

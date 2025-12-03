@@ -5,7 +5,7 @@ Este proyecto formó parte de mi aprendizaje de rust. Mi objetivo era aprender l
 Esta aplicación permite crear tareas (tickets) con distintas prioridades y almacenarlas en un archivo estático.
 
 ## Instalación
-Ve a [https://github.com/alexwebdev05/ITTaskManager/releases](url) y descarga la última versión
+En el repositorio de github ve a "releases" y descarga la última versión
 
 ## Uso
 Habrá 5 opciones disponibles:
